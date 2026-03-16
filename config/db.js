@@ -20,9 +20,12 @@ export async function connectDB() {
 
     cached.promise = connect(mongoUri, {
       bufferCommands: false,
-      serverSelectionTimeoutMS: 10000,
-      socketTimeoutMS: 45000,
+      serverSelectionTimeoutMS: 20000,
+      socketTimeoutMS: 60000,
+      connectTimeoutMS: 20000,
+      retryWrites: true,
       family: 4, // Force IPv4
+      authSource: "admin",
     }).then((mongoose) => {
       console.log(`MongoDB connected: ${mongoose.connection.host}`);
       return mongoose;
