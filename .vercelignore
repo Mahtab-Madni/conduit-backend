@@ -1,0 +1,5 @@
+node_modules;
+npm - debug.log.env.local.env.development.DS_Store.git.gitignore;
+README.md;
+package - lock.json;
+yarn.lock;

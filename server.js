@@ -18,13 +18,19 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3002;
 
-// Database connection
-connectDB();
+// Database connection (async initialization)
+(async () => {
+  try {
+    await connectDB();
+  } catch (err) {
+    console.error("Failed to initialize database:", err);
+  }
+})();
 
 // Security middleware
 app.use(
   helmet({
-    contentSecurityPolicy: false, // Disable CSP for development (adjust for production)
+    contentSecurityPolicy: process.env.NODE_ENV === "production" ? true : false,
   }),
 );
 
@@ -75,9 +81,12 @@ app.use(errorHandler);
 // 404 handler (must be after all routes)
 app.use(notFoundHandler);
 
-app.listen(PORT, () => {
-  console.log(`Conduit Backend running on port ${PORT}`);
-  console.log(`MongoDB URI: ${process.env.MONGODB_URI}`);
-});
+// Only listen in local development, not on Vercel
+if (process.env.NODE_ENV !== "production") {
+  app.listen(PORT, () => {
+    console.log(`Conduit Backend running on port ${PORT}`);
+    console.log(`MongoDB URI: ${process.env.MONGODB_URI}`);
+  });
+}
 
 export default app;
