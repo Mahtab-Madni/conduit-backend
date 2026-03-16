@@ -1,9 +1,3 @@
 {
-  "version": 2,
-  "functions": {
-    "server.js": {
-      "maxDuration": 30,
-      "memory": 256
-    }
-  }
+  "version": 2
 }
