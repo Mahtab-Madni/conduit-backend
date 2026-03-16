@@ -18,6 +18,9 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3002;
 
+// Trust proxy for Vercel
+app.set("trust proxy", 1);
+
 // Database connection (async initialization)
 (async () => {
   try {
