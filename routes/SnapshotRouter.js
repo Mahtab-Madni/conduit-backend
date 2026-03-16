@@ -2,6 +2,7 @@ import { Router } from "express";
 import { authenticateToken } from "../middleware/authentication.js";
 import {
   createSnapshot,
+  saveCheckpoint,
   getRouteSnapshots,
   getSnapshot,
   deleteSnapshot,
@@ -13,6 +14,7 @@ import {
 const snapshotRouter = Router();
 
 snapshotRouter.post("/", authenticateToken, createSnapshot);
+snapshotRouter.post("/checkpoint", authenticateToken, saveCheckpoint);
 snapshotRouter.get("/route/:routeId", authenticateToken, getRouteSnapshots);
 snapshotRouter.get("/:id", authenticateToken, getSnapshot);
 snapshotRouter.get("/:id/restore", authenticateToken, restoreSnapshot);
