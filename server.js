@@ -72,7 +72,7 @@ app.use(urlencoded({ extended: true }));
 
 // Health check
 app.get("/health", (req, res) => {
-  res.json({ status: "OK", timestamp: new Date().toISOString() });
+  res.json({ status: "OK", message: "Conduit Backend is healthy!" });
 });
 
 // API Routes
