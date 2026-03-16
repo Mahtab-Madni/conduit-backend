@@ -185,3 +185,80 @@ export const diffSnapshots = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+/**
+ * Update snapshot metadata (tags, notes, description)
+ * PATCH /api/snapshots/:id
+ */
+export const updateSnapshot = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { tags, notes, description } = req.body;
+
+    const snapshot = await RouteSnapshot.findOne({
+      _id: id,
+      userId: req.user._id,
+    });
+
+    if (!snapshot) {
+      return res.status(404).json({ error: "Snapshot not found" });
+    }
+
+    // Only allow updating specific fields
+    if (tags !== undefined) {
+      snapshot.tags = tags.map((tag) => tag.toLowerCase().trim());
+    }
+    if (notes !== undefined) {
+      snapshot.notes = notes;
+    }
+    if (description !== undefined) {
+      snapshot.description = description;
+    }
+
+    await snapshot.save();
+
+    res.json({
+      message: "Snapshot updated successfully",
+      snapshot,
+    });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
+
+/**
+ * Restore a snapshot (get full snapshot details for restoration)
+ * GET /api/snapshots/:id/restore
+ */
+export const restoreSnapshot = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const snapshot = await RouteSnapshot.findOne({
+      _id: id,
+      userId: req.user._id,
+    }).populate("collectionId", "name color");
+
+    if (!snapshot) {
+      return res.status(404).json({ error: "Snapshot not found" });
+    }
+
+    // Return snapshot in a format suitable for restoration
+    res.json({
+      success: true,
+      data: {
+        id: snapshot._id,
+        routePath: snapshot.routePath,
+        method: snapshot.method,
+        code: snapshot.code,
+        predictedPayload: snapshot.predictedPayload,
+        filePath: snapshot.filePath,
+        createdAt: snapshot.createdAt,
+        notes: snapshot.notes,
+        tags: snapshot.tags,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};

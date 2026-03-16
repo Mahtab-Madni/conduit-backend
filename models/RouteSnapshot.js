@@ -90,6 +90,18 @@ const routeSnapshotSchema = new Schema(
         lowercase: true,
       },
     ],
+    // User notes/annotations for this snapshot
+    notes: {
+      type: String,
+      required: false,
+      default: "",
+    },
+    // Description of what changed in this snapshot
+    description: {
+      type: String,
+      required: false,
+      default: "",
+    },
   },
   {
     timestamps: true,
