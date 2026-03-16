@@ -22,13 +22,17 @@ const PORT = process.env.PORT || 3002;
 app.set("trust proxy", 1);
 
 // Database connection (async initialization)
-(async () => {
-  try {
+let isConnected = false;
+
+const dbMiddleware = async (req, res, next) => {
+  if (!isConnected) {
     await connectDB();
-  } catch (err) {
-    console.error("Failed to initialize database:", err);
+    isConnected = true;
   }
-})();
+  next();
+};
+
+app.use(dbMiddleware);
 
 // Security middleware
 app.use(
