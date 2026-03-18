@@ -479,10 +479,12 @@ export const restoreSnapshot = async (req, res) => {
         method: snapshot.method,
         code: snapshot.code,
         predictedPayload: snapshot.predictedPayload,
+        lastPayload: snapshot.lastPayload,
+        lastRequest: snapshot.lastRequest,
+        lastResponse: snapshot.lastResponse,
         filePath: snapshot.filePath,
         createdAt: snapshot.createdAt,
-        notes: snapshot.notes,
-        tags: snapshot.tags,
+        middleware: snapshot.middleware,
       },
     });
   } catch (error) {
